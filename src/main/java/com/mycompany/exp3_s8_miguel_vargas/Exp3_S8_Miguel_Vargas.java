@@ -167,10 +167,72 @@
             System.out.println("Se le redirigirá automáticamente al menú de pago.\n");
              
             procesarPago(scanner);
-            }
         }
+    }
+
+    public static void procesarPago(Scanner scanner) {
+        System.out.println("\nSu compra es de " + entradaAcumulada + " entradas, por un total de $" + totalAcumulado);
+        System.out.println("Seleccione el medio de pago:");
+        System.out.println("1. Débito\n2. Crédito\n3. Transferencia\n4. Cancelar compra");
+    
+        int confirmaCompra;
+        do {
+            confirmaCompra = scanner.nextInt();
+        } while (confirmaCompra < 1 || confirmaCompra > 4);
+    
+        switch (confirmaCompra) {
+            case 1:
+                generarBoleta();
+                System.out.println("Pago con tarjeta de débito. Procesando...");
+                confirmarCompra(scanner, "Débito");
+                break;
+    
+            case 2:
+                generarBoleta();
+                System.out.println("Pago con tarjeta de crédito.");
+                System.out.print("Indique la cantidad de cuotas (1 a 12 cuotas): ");
+                int cuotas = scanner.nextInt();
+    
+                if (cuotas < 1 || cuotas > 12) {
+                    System.out.println("Número de cuotas seleccionado inválido.");
+                } else {
+                    System.out.println("Tu compra será cargada en tu tarjeta en " + cuotas + " cuotas.");
+                }
+                confirmarCompra(scanner, "Crédito");
+                break;
+    
+            case 3:
+                generarBoleta();
+                System.out.println("Pago mediante transferencia.");
+                System.out.println("Recuerda que recibirás las instrucciones para la transferencia en tu correo.");
+                confirmarCompra(scanner, "Transferencia");
+                break;
+    
+            case 4:
+                System.out.println("Compra cancelada. Vuelve pronto.");
+                System.exit(0); // Finaliza el programa
+                break;
+        }
+    
+        //preguntar si desea hacer otra compra
+        System.out.println("\n¿Desea realizar otra compra?");
+        System.out.println("1. Sí, quiero comprar más entradas.");
+        System.out.println("2. No, quiero salir.");
+    
+        int opcion = scanner.nextInt();
+    
+        if (opcion == 1) {
+            entradasCompradas.clear(); //limpiar la lista solo después del pago
+            iniciarNuevaCompra(); //generará un nuevo ID para la proxima compra
+            System.out.println("\nRedirigiendo al menú principal...");
+            main(null); //reinicia el bucle para poder ejecutar nuevamente el menu
+        } else {
+            System.out.println("\nGracias por usar nuestro sistema. ¡Hasta luego!");
+            System.exit(0); //cierra el programa
+        }
+    }
  
-    //método para opción 5 - pagar
+    /* //método para opción 5 - pagar
     public static void procesarPago(Scanner scanner) {
         System.out.println("\nSu compra es de " + entradaAcumulada + " entradas, por un total de $" + totalAcumulado);
         System.out.println("Seleccione el medio de pago:");
@@ -214,7 +276,7 @@
                 System.exit(0); //finaliza el programa de forma automática 
                 break;
         }
-    }
+    } */
  
     public static double obtenerUltimoPrecio() {
          
@@ -455,6 +517,7 @@
      
         System.out.println("\n--- Detalle de la Compra ---");
         System.out.println("--------------------------------------");
+        System.out.println("ID de compra: " + idVentaGlobal);
      
         double total = 0;
      
@@ -469,6 +532,15 @@
  
     //método para la selección de asiento y calculo de precios 
     public static void seleccionarEntradas(Scanner scanner) {
+
+        /* este nuevo bloque de código verifica que no exista una transacción pendiente, de esta forma evitamos que el cliente
+        pueda repetir el proceso de compra de forma indefinida y burlar el limite de entradas establecido */
+        if (!entradasCompradas.isEmpty()) { //si hay entradas en la lista, obliga al pago antes de otra compra
+            System.out.println("\nTiene una compra pendiente de pago.");
+            procesarPago(scanner); // Redirigir al proceso de pago
+            return; // Bloquear la nueva compra hasta que se complete el pago
+        }
+    
         System.out.println("¿Cuántas entradas desea comprar? (Máximo 5)");
         int cantidad = scanner.nextInt();
      
@@ -605,6 +677,7 @@
     public static void generarBoleta() { //BREAKPOINT: agregar un punto para verificar que las entradas y sus valores se cargaron correctamente
         
         System.out.println("\n--------------- BOLETA ---------------");
+        System.out.println("                Nº 000" + idVentaGlobal);
         System.out.println("             TEATRO MORO");
         System.out.println(" SHOW: De vuelta a clases con el GOTH");
         System.out.println("--------------------------------------");
