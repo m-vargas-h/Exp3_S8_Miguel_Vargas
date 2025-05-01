@@ -143,6 +143,7 @@
                  
                     default:
                         System.out.println("Opción invalida");
+                        scanner.next();
                         break;
                 }
  
@@ -170,7 +171,7 @@
         }
     }
 
-    public static void procesarPago(Scanner scanner) {
+     public static void procesarPago(Scanner scanner) {
         System.out.println("\nSu compra es de " + entradaAcumulada + " entradas, por un total de $" + totalAcumulado);
         System.out.println("Seleccione el medio de pago:");
         System.out.println("1. Débito\n2. Crédito\n3. Transferencia\n4. Cancelar compra");
@@ -178,7 +179,7 @@
         int confirmaCompra;
         do {
             confirmaCompra = scanner.nextInt();
-        } while (confirmaCompra < 1 || confirmaCompra > 4);
+        } while (confirmaCompra < 1 || confirmaCompra > 5);
     
         switch (confirmaCompra) {
             case 1:
@@ -224,59 +225,14 @@
         if (opcion == 1) {
             entradasCompradas.clear(); //limpiar la lista solo después del pago
             iniciarNuevaCompra(); //generará un nuevo ID para la proxima compra
-            System.out.println("\nRedirigiendo al menú principal...");
-            main(null); //reinicia el bucle para poder ejecutar nuevamente el menu
+            return;
+            //System.out.println("\nRedirigiendo al menú principal...");
+            //main(null); //reinicia el bucle para poder ejecutar nuevamente el menu
         } else {
             System.out.println("\nGracias por usar nuestro sistema. ¡Hasta luego!");
             System.exit(0); //cierra el programa
         }
     }
- 
-    /* //método para opción 5 - pagar
-    public static void procesarPago(Scanner scanner) {
-        System.out.println("\nSu compra es de " + entradaAcumulada + " entradas, por un total de $" + totalAcumulado);
-        System.out.println("Seleccione el medio de pago:");
-        System.out.println("1. Débito\n2. Crédito\n3. Transferencia\n4. Cancelar compra");
-         
-        int confirmaCompra;
-        do {
-            confirmaCompra = scanner.nextInt();
-        } while (confirmaCompra < 1 || confirmaCompra > 4);
-     
-        switch (confirmaCompra) { //BREAKPOINT: agregar para verificar que las variables hayan acumulado los valores de manera correcta
-            case 1:
-                generarBoleta();
-                System.out.println("Pago con tarjeta de débito. Procesando...");
-                confirmarCompra(scanner, "Débito");
-                break;
- 
-            case 2:
-                generarBoleta();
-                System.out.println("Pago con tarjeta de crédito.");
-                System.out.println("Indique la cantidad de cuotas (1 a 12 cuotas): ");
-                int cuotas = scanner.nextInt();
- 
-                if (cuotas < 1 || cuotas > 12) {
-                    System.out.println("Numero de cuotas seleccionado invalido");
-                } else {
-                    System.out.println("Tu compra sera cargada en tu tarjeta en " + cuotas + " cuotas");
-                }
-                confirmarCompra(scanner, "Crédito");
-                break;
- 
-            case 3:
-            generarBoleta();
-                System.out.println("Pago mediante transferencia.");
-                System.out.println("Recuerda que recibirás las instrucciones para la transferencia en tu correo");
-                confirmarCompra(scanner, "Transferencia");
-                break;
-             
-            case 4:
-                System.out.println("Compra cancelada. Vuelve pronto.");
-                System.exit(0); //finaliza el programa de forma automática 
-                break;
-        }
-    } */
  
     public static double obtenerUltimoPrecio() {
          
