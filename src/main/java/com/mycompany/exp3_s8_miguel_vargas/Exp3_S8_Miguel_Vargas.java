@@ -69,9 +69,11 @@
         public String toString() {
             String zona = (zonaSeleccionada == 1) ? "VIP" : (zonaSeleccionada == 2) ? "Normal" : "Palco";
             return "Venta ID: " + idVenta + " | Zona: " + zona + " | Asiento: " + filaChar + (columna + 1) +
-                   " | Precio: $" + precioBase + 
-                   " | " + (esReserva ? "Reserva" : "Venta Finalizada") +
-                   " | Descuento: " + (descuentoAplicado * 100) + "%";
+            " | Precio original: $" + precioBase +
+            " | Precio final: $" + (precioBase * (1 - descuentoAplicado)) +
+            " | " + (esReserva ? "Reserva" : "Venta Finalizada") +
+            " | Descuento aplicado: " + (descuentoAplicado * 100) + "%";
+
         }
 
     }
@@ -479,7 +481,7 @@
      
         for (Entrada entrada : entradasCompradas) {
             System.out.println(entrada); // Usa el `toString()` de `Entrada` para mostrar la información
-            total += entrada.precioBase;
+            total += entrada.precioBase * (1 - entrada.descuentoAplicado);
         }
      
         System.out.println("--------------------------------------");
@@ -546,28 +548,18 @@
                     char filaChar = (char) ('A' + fila);
          
                     // Solicitar la edad para determinar el descuento.
-                    double descuentoLocal = 0;
                     System.out.print("Ingrese su edad: ");
                     if (scanner.hasNextInt()) {
                         int edad = scanner.nextInt();
-        
-                        if (edad >= 60) {
-                            descuentoLocal = 0.15;
-                            System.out.println("Se aplicará un descuento del 15%.");
-                        } else if (edad >= 18 && edad <= 25) {
-                            descuentoLocal = 0.10;
-                            System.out.println("Se aplicará un descuento del 10%.");
-                        } else {
-                            System.out.println("No hay descuentos disponibles actualmente.");
-                        }
-         
-                        double precioFinalCalculado = precioBase * (1 - descuentoLocal);
+
+                        double descuentoAplicado = (precioBase - calcularDescuento(edad, precioBase)) / precioBase;
+                        double precioFinalCalculado = calcularDescuento(edad, precioBase);
          
                         // Crear y añadir la entrada a la lista.
                         int idVenta = entradasCompradas.size() + 1; // Generar un ID de venta único
                         boolean esReserva = false; // Indicar si es una reserva
 
-                        Entrada nuevaEntrada = new Entrada(idVenta, zonaSeleccionada, fila, columna, precioBase, filaChar, esReserva, descuentoLocal);
+                        Entrada nuevaEntrada = new Entrada(idVenta, zonaSeleccionada, fila, columna, precioBase, filaChar, esReserva, descuentoAplicado);
                         entradasCompradas.add(nuevaEntrada);
                         totalAcumulado += precioFinalCalculado;
                         entradaAcumulada++;
@@ -621,12 +613,16 @@
         System.out.println("\nZona Palco:");
         mostrarPlano(zonaPalco);
     }
- 
+
+    static List<String> promociones = List.of(
+    "10% de descuento para estudiantes.",
+    "15% de descuento para personas de la tercera edad."
+    );
+
     //método para la opción 3 - promociones
     static void promocionesDisponibles() {
         System.out.println("\n--- Promociones Disponibles ---");
-        System.out.println("- 10% de descuento para estudiantes.");
-        System.out.println("- 15% de descuento para personas de la tercera edad.");
+        promociones.forEach(System.out::println);
     }
  
     //método para generar boleta de compra
@@ -648,8 +644,6 @@
     
             double precioBase = (entrada.zonaSeleccionada == 1) ? 20000 : 
                             (entrada.zonaSeleccionada == 2) ? 7000 : 12000; //precio sin descuento
-            double descuentoAplicado = entrada.descuentoAplicado * precioBase;  //monto del descuento
-            double precioFinal = precioBase - descuentoAplicado; //precio con el descuento aplicado
             double ivaPorEntrada = entrada.precioBase * 0.19;
             double precioNetoEntrada = entrada.precioBase - ivaPorEntrada;
      
@@ -658,13 +652,13 @@
             System.out.println("Asiento      : " + entrada.filaChar + (entrada.columna + 1));
             System.out.println("Precio Base  : $" + precioBase);
             System.out.println("Descuento    : " + (entrada.descuentoAplicado * 100) + "%");
-            System.out.println("Precio final : $" + precioFinal);
+            System.out.println("Precio final : $" + totalFinal);
      
             System.out.println("--------------------------------------");
      
             totalNeto += precioNetoEntrada;
             totalIVA += ivaPorEntrada;
-            totalFinal += entrada.precioBase;
+            totalFinal += entrada.precioBase * (1 - entrada.descuentoAplicado);
         }
      
         System.out.println("-------- RESUMEN DE LA COMPRA --------");
@@ -726,5 +720,19 @@
     public static void iniciarNuevaCompra() {
         idVentaGlobal++; //incrementar el id al iniciar una nueva compra desde el menu para diferenciar cada venta
     }
+
+    //método para el calculo del descuento
+    public static double calcularDescuento(int edad, double precioBase) {
+        double descuento = 0.0;
+
+        if (edad >= 60) {
+            descuento = 0.15; // 15% de descuento para tercera edad
+        } else if (edad >= 18 && edad <= 25) {
+            descuento = 0.10; // 10% de descuento para estudiantes
+        }
+
+        return precioBase * (1 - descuento); // Aplicar descuento al precio base
+    }
+
      
  }
