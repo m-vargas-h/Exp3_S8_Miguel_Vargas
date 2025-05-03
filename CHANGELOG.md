@@ -1,6 +1,11 @@
 # Changelog
 
-## 01/05/2025 - Creación nuevos métodos (last commit)
+## 02/05/2025 Creación nueva clase (last commit)
+- Se creo la clase Entrada para presentar las compras de forma mas estructurada ya que facilita el almacenamiento
+  y modificación de datos. Se configuraron diversos getter y setter para poder leer y modificar la información.
+
+
+### 01/05/2025 - Creación nuevos métodos (commit a8cb6ef)
 - se creo el método calcularDescuento para poder modificar los descuentos y su aplicación de forma mas sencilla.
 - se modifico el método promocionesDisponibles para facilitar la creación y/0 modificación de promociones listadas.
 
@@ -10,7 +15,8 @@
 
 ### 01/05/2025 - Modificación sistema de compra (commit 588fe09)
 - se modifico el método procesarPago agregando una validación que obligue al usuario a pagar la
-  transacción actual antes de poder hacer una nueva, de esta forma se evita que se pueda comprar mas de 5 entradas por transacción. Ademas se incluye la opción de realizar una nueva compra después de pagar.
+  transacción actual antes de poder hacer una nueva, de esta forma se evita que se pueda comprar mas de 5 entradas por 
+  transacción. Ademas se incluye la opción de realizar una nueva compra después de pagar.
 - se modifico el método generarBoleta para que ahora incluya el numero de la venta.
 
 ### 01/05/2025 - Modificación plano y métodos asociados (commit 8832cca)
@@ -22,7 +28,7 @@
     - agregarEntradas
     - seleccionarEntradas
 
-## 30/04/2025 - Carga Inicial Archivos (commit 50c63ea)
+### 30/04/2025 - Carga Inicial Archivos (commit 50c63ea)
 - Creación de repositorio base utilizando como base el proyecto anterior.
 - Creación fichero README con información básica del proyecto.
 - Creación fichero CHANGELOG con un historial de modificaciones.

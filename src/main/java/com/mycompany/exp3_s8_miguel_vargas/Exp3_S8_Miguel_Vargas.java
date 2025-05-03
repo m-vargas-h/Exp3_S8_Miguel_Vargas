@@ -4,13 +4,13 @@
 
  package com.mycompany.exp3_s8_miguel_vargas;
 
- import java.util.ArrayList;
- import java.util.List;
  import java.util.Scanner;
- 
+ import java.util.List;
+ import java.util.ArrayList;
+
  /**
   * S8 - Optimizando listas y arreglos en Java
-  * @author mvarg
+  * author Miguel Vargas
   */
 
  public class Exp3_S8_Miguel_Vargas {
@@ -42,41 +42,6 @@
     //listas para almacenar entradas compradas y reservas de asientos
     static List<Entrada> entradasCompradas = new ArrayList<>();
     static List<Entrada> reservasAsientos = new ArrayList<>();
- 
-    static class Entrada {
-        int idVenta;
-        int zonaSeleccionada;
-        int fila;
-        int columna;
-        double precioBase;
-        char filaChar;
-        boolean esReserva;
-        double descuentoAplicado; //nuevo atributo para registrar descuento
-     
-        public Entrada(int idVenta, int zonaSeleccionada, int fila, int columna, double precioBase, char filaChar, boolean esReserva, double descuentoAplicado) {
-            this.idVenta = idVenta;
-            this.zonaSeleccionada = zonaSeleccionada;
-            this.fila = fila;
-            this.columna = columna;
-            this.precioBase = precioBase;
-            this.filaChar = filaChar;
-            this.esReserva = esReserva;
-            this.descuentoAplicado = descuentoAplicado;
-    
-        }
-     
-        @Override
-        public String toString() {
-            String zona = (zonaSeleccionada == 1) ? "VIP" : (zonaSeleccionada == 2) ? "Normal" : "Palco";
-            return "Venta ID: " + idVenta + " | Zona: " + zona + " | Asiento: " + filaChar + (columna + 1) +
-            " | Precio original: $" + precioBase +
-            " | Precio final: $" + (precioBase * (1 - descuentoAplicado)) +
-            " | " + (esReserva ? "Reserva" : "Venta Finalizada") +
-            " | Descuento aplicado: " + (descuentoAplicado * 100) + "%";
-
-        }
-
-    }
  
     public static void main(String[] args) {
         
@@ -187,6 +152,7 @@
             case 1:
                 generarBoleta();
                 System.out.println("Pago con tarjeta de débito. Procesando...");
+                Entrada nuevaEntrada = new Entrada(1, 2, 0, 0, 7000, 'A', false, 0.1);
                 confirmarCompra(scanner, "Débito");
                 break;
     
@@ -201,6 +167,7 @@
                 } else {
                     System.out.println("Tu compra será cargada en tu tarjeta en " + cuotas + " cuotas.");
                 }
+                nuevaEntrada = new Entrada(1, 2, 0, 0, 7000, 'A', false, 0.1);
                 confirmarCompra(scanner, "Crédito");
                 break;
     
@@ -208,6 +175,7 @@
                 generarBoleta();
                 System.out.println("Pago mediante transferencia.");
                 System.out.println("Recuerda que recibirás las instrucciones para la transferencia en tu correo.");
+                nuevaEntrada = new Entrada(1, 2, 0, 0, 7000, 'A', false, 0.1);
                 confirmarCompra(scanner, "Transferencia");
                 break;
     
@@ -256,10 +224,10 @@
         System.out.print("Para finalizar, ingrese su correo: ");
         scanner.nextLine();         //limpiar entrada
         String correo = scanner.nextLine();
-         
+
         System.out.println("\nSu boleta y entradas serán enviadas al correo " + correo);
         System.out.println("Gracias por usar nuestro sistema. ¡Hasta luego!");
- 
+    
     }
  
     //método para opción 4 - modificar compra
@@ -315,9 +283,9 @@
         if (indice >= 0 && indice < entradasCompradas.size()) {
             Entrada entrada = entradasCompradas.get(indice);
             // Liberar el asiento anterior
-            boolean[][] antiguaZona = (entrada.zonaSeleccionada == 1) ? zonaVip 
-                                      : (entrada.zonaSeleccionada == 2) ? zonaNormal : zonaPalco;
-            antiguaZona[entrada.fila][entrada.columna] = false; 
+            boolean[][] antiguaZona = (entrada.getZonaSeleccionada() == 1) ? zonaVip 
+                                      : (entrada.getZonaSeleccionada() == 2) ? zonaNormal : zonaPalco;
+            antiguaZona[entrada.getFila()][entrada.getColumna()] = false; 
      
             // Solicitar la nueva zona y usar el método auxiliar para reservar el nuevo asiento.
             System.out.println("\nSeleccione una nueva zona (1. VIP / 2. Normal / 3. Palco):");
@@ -336,11 +304,11 @@
             char nuevaFilaChar = (char) ('A' + nuevaFila);
      
             // Actualizar los datos de la entrada
-            entrada.zonaSeleccionada = nuevaZona;
-            entrada.fila = nuevaFila;
-            entrada.columna = nuevaColumna;
-            entrada.precioBase = nuevoPrecioBase;
-            entrada.filaChar = nuevaFilaChar;
+            entrada.setPrecioBase(nuevaZona);
+            entrada.setFila(nuevaFila);
+            entrada.setColumna(nuevaColumna);
+            entrada.setPrecioBase(nuevoPrecioBase);
+            entrada.setFilaChar(nuevaFilaChar);
      
             System.out.println("Entrada modificada exitosamente.");
         } else {
@@ -369,9 +337,9 @@
      
         if (indice >= 0 && indice < entradasCompradas.size()) {
             Entrada entrada = entradasCompradas.get(indice);
-            boolean[][] zonaActual = (entrada.zonaSeleccionada == 1) ? zonaVip : (entrada.zonaSeleccionada == 2) ? zonaNormal : zonaPalco;
-            zonaActual[entrada.fila][entrada.columna] = false; //liberar asiento ocupado
-            totalAcumulado -= entrada.precioBase; //ajustar total acumulado
+            boolean[][] zonaActual = (entrada.getZonaSeleccionada() == 1) ? zonaVip : (entrada.getZonaSeleccionada() == 2) ? zonaNormal : zonaPalco;
+            zonaActual[entrada.getFila()][entrada.getColumna()] = false; //liberar asiento ocupado
+            totalAcumulado -= entrada.getPrecioBase(); //ajustar total acumulado
     
             entradasCompradas.remove(indice); //eliminar entrada de la lista
             System.out.println("Entrada eliminada exitosamente.");
@@ -464,6 +432,7 @@
         System.out.println("4. Modificar compra");
         System.out.println("5. Pagar");
         System.out.println("6. Salir");
+        System.out.println("8. Ver registro compras"); //provisorio
         System.out.println("Seleccione una de las opciones disponibles: ");
     }
  
@@ -481,7 +450,7 @@
      
         for (Entrada entrada : entradasCompradas) {
             System.out.println(entrada); // Usa el `toString()` de `Entrada` para mostrar la información
-            total += entrada.precioBase * (1 - entrada.descuentoAplicado);
+            total += entrada.getPrecioBase() * (1 - entrada.getDescuentoAplicado());
         }
      
         System.out.println("--------------------------------------");
@@ -640,25 +609,25 @@
      
         for (int i = 0; i < entradasCompradas.size(); i++) {
             Entrada entrada = entradasCompradas.get(i);
-            String zona = (entrada.zonaSeleccionada == 1) ? "VIP" : (entrada.zonaSeleccionada == 2) ? "Normal" : "Palco";
+            String zona = (entrada.getZonaSeleccionada() == 1) ? "VIP" : (entrada.getZonaSeleccionada() == 2) ? "Normal" : "Palco";
     
-            double precioBase = (entrada.zonaSeleccionada == 1) ? 20000 : 
-                            (entrada.zonaSeleccionada == 2) ? 7000 : 12000; //precio sin descuento
-            double ivaPorEntrada = entrada.precioBase * 0.19;
-            double precioNetoEntrada = entrada.precioBase - ivaPorEntrada;
+            double precioBase = (entrada.getZonaSeleccionada() == 1) ? 20000 : 
+                            (entrada.getZonaSeleccionada() == 2) ? 7000 : 12000; //precio sin descuento
+            double ivaPorEntrada = entrada.getPrecioBase() * 0.19;
+            double precioNetoEntrada = entrada.getPrecioBase() - ivaPorEntrada;
      
             System.out.println("Entrada #" + (i + 1));
             System.out.println("Zona         : " + zona);
-            System.out.println("Asiento      : " + entrada.filaChar + (entrada.columna + 1));
-            System.out.println("Precio Base  : $" + precioBase);
-            System.out.println("Descuento    : " + (entrada.descuentoAplicado * 100) + "%");
+            System.out.println("Asiento      : " + entrada.getFilaChar() + (entrada.getColumna() + 1));
+            System.out.println("Precio Base  : $" + entrada.getPrecioBase());
+            System.out.println("Descuento    : " + (entrada.getDescuentoAplicado() * 100) + "%");
             System.out.println("Precio final : $" + totalFinal);
      
             System.out.println("--------------------------------------");
      
             totalNeto += precioNetoEntrada;
             totalIVA += ivaPorEntrada;
-            totalFinal += entrada.precioBase * (1 - entrada.descuentoAplicado);
+            totalFinal += entrada.getPrecioBase() * (1 - entrada.getDescuentoAplicado());
         }
      
         System.out.println("-------- RESUMEN DE LA COMPRA --------");
@@ -705,9 +674,9 @@
 
     public static void confirmarReserva(int idReserva, double descuentoAplicado) {
         for (Entrada reserva : reservasAsientos) {
-            if (reserva.idVenta == idReserva) {
-                reserva.esReserva = false;
-                reserva.descuentoAplicado = descuentoAplicado;
+            if (reserva.getIdVenta() == idReserva) {
+                reserva.setReserva(false);
+                reserva.setDescuentoAplicado(descuentoAplicado);
                 entradasCompradas.add(reserva);
                 reservasAsientos.remove(reserva);
                 System.out.println("Reserva confirmada como venta: " + reserva);
