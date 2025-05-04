@@ -1,6 +1,12 @@
 # Changelog
 
-## 02/05/2025 Creación nueva clase (last commit)
+## 04/05/2025 Creación clases adicionales (last commit)
+- Se creo la clase EntradaManager para mover la gestión de entradas ahi, esta clase se encarga de la reserva y
+  validación de asientos, ademas de la modificación de compras.
+- Se creo la clase TeatroUI que maneja la interfaz de usuario y el flujo del menu, esta clase permite y gestiona
+  la navegación entre las distintas opciones del menu.
+
+### 02/05/2025 Creación nueva clase (commit 65f790f)
 - Se creo la clase Entrada para presentar las compras de forma mas estructurada ya que facilita el almacenamiento
   y modificación de datos. Se configuraron diversos getter y setter para poder leer y modificar la información.
 
