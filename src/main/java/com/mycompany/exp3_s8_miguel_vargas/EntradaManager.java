@@ -126,7 +126,7 @@ public class EntradaManager {
         scanner.nextLine();
     
         switch (opcionPago) {
-            case 1 -> procesarPagoDebito(scanner);
+            case 1 -> procesarPagoDebito(scanner); //BREAKPOINT para verificar que la opción elegida se procesa de forma correcta
             case 2 -> procesarPagoCredito(scanner);
             case 3 -> procesarPagoTransferencia(scanner);
             case 4 -> {
@@ -232,7 +232,7 @@ public class EntradaManager {
         System.out.println("-------- RESUMEN DE LA COMPRA --------");
         System.out.println("Subtotal (Neto)     : $" + totalNeto);
         System.out.println("IVA (19%)           : $" + totalIVA);
-        System.out.println("TOTAL FINAL A PAGAR : $" + totalFinal);
+        System.out.println("TOTAL FINAL A PAGAR : $" + totalFinal); //BREAKPOINT para verificar que los cálculos son correctos antes de mostrarlos
         System.out.println("--------------------------------------");
         System.out.println("¡Gracias por tu compra!");
     }
@@ -306,7 +306,7 @@ public class EntradaManager {
         };
     
         if (zonaActual != null) {
-            zonaActual[entradaActual.getFila()][entradaActual.getColumna()] = false;
+            zonaActual[entradaActual.getFila()][entradaActual.getColumna()] = false; //BREAKPOINT para verificar que el asiento anterior se libera de forma correcta
         }
     
         System.out.println("Seleccione la nueva zona (1. VIP / 2. Normal / 3. Palco): ");
@@ -376,7 +376,7 @@ public class EntradaManager {
             } else if (zonaActual[fila][columna]) { //verifica si está ocupado
                 System.out.println("El asiento ya está ocupado. Intente nuevamente.");
             } else {
-                zonaActual[fila][columna] = true; //marcar asiento como reservado
+                zonaActual[fila][columna] = true; //marcar asiento como reservado, BREAKPOINT para confirmar que el asiento seleccionado este libre
                 break;
             }
         }
@@ -411,7 +411,7 @@ public class EntradaManager {
     
                 mostrarPlano(zonaActual);
                 System.out.println("Seleccione su asiento:");
-                int[] asiento = reservarAsiento(scanner, zonaActual);
+                int[] asiento = reservarAsiento(scanner, zonaActual); //BREAKPOINT para que la zona y asientos son correctos
                 int fila = asiento[0];
                 int columna = asiento[1];
                 char filaChar = (char) ('A' + fila);

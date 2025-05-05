@@ -1,6 +1,9 @@
 # Changelog
 
-## 05/05/2025 - Ajustes finales (last commit)
+## 05/05/2025 - Inclusion Breakpoints (last commit)
+- Inclusion de comentarios con Breakpoints en el código para verificar la correcta ejecución del código.
+
+### 05/05/2025 - Ajustes finales (commit 4672cdd)
 - Se realizan ajustes menores de los mensajes imprimidos por consola para facilitar la comprensión de las
   instrucciones entregadas al usuario.
 - Se actualizan comentarios finales dentro del código para indiciar el uso de cada método.
