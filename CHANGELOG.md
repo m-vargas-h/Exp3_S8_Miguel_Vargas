@@ -1,12 +1,19 @@
 # Changelog
 
-## 04/05/2025 Creación clases adicionales (last commit)
+## 05/05/2025 - Ajustes finales (last commit)
+- Se realizan ajustes menores de los mensajes imprimidos por consola para facilitar la comprensión de las
+  instrucciones entregadas al usuario.
+- Se actualizan comentarios finales dentro del código para indiciar el uso de cada método.
+- Se actualiza el fichero Readme con una explicación del funcionamiento del código.
+- Creación de un fichero Métodos con una explicación del funcionamiento de los métodos utilizados en cada clase.
+
+### 04/05/2025 Creación clases adicionales (commit acbdfc6)
 - Se creo la clase EntradaManager para mover la gestión de entradas ahi, esta clase se encarga de la reserva y
   validación de asientos, ademas de la modificación de compras.
 - Se creo la clase TeatroUI que maneja la interfaz de usuario y el flujo del menu, esta clase permite y gestiona
   la navegación entre las distintas opciones del menu.
 
-### 02/05/2025 Creación nueva clase (commit 65f790f)
+### 02/05/2025 - Creación nueva clase (commit 65f790f)
 - Se creo la clase Entrada para presentar las compras de forma mas estructurada ya que facilita el almacenamiento
   y modificación de datos. Se configuraron diversos getter y setter para poder leer y modificar la información.
 

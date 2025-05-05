@@ -10,14 +10,18 @@
   */
 
   public class Exp3_S8_Miguel_Vargas {
-      public static void main(String[] args) {
-          // Instanciar el sistema de gestión de entradas
-          EntradaManager entradaManager = new EntradaManager();
+
+    public static void main(String[] args) {
+
+        //llamamos a la clase entradaManager para gestionar todo el proceso de compra
+        EntradaManager entradaManager = new EntradaManager();
   
-          // Pasar la gestión de entradas a la interfaz de usuario
-          TeatroUI teatroUI = new TeatroUI(entradaManager);
+        //llamamos a la clase teatroUI para gestionar la interfaz 
+        TeatroUI teatroUI = new TeatroUI(entradaManager);
           
-          // Iniciar la interacción con el usuario
-          teatroUI.mostrarMenu();
-      }
+        //llamamos al método mostrarMenu para comenzar la ejecución del programa
+        teatroUI.mostrarMenu();
+
+   
+    }
   }

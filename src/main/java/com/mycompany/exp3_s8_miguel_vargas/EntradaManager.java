@@ -5,10 +5,11 @@ import java.util.Scanner;
 import java.util.ArrayList;
 
 public class EntradaManager {
+
     private List<Entrada> entradasCompradas;
     private List<Entrada> reservasAsientos;
     private int idVentaGlobal = 1; // ID de venta inicial
-    private int idCompraActual = 1; // Inicializar ID de compra
+    private int idCompraActual = 1; //valor inicial del ID de compra
 
     //distribución de asientos por zona. true = asiento ocupado, false = asiento libre
     static boolean[][] zonaVip = new boolean[2][6];
@@ -16,14 +17,15 @@ public class EntradaManager {
     static boolean[][] zonaPalco = new boolean[3][6];
 
     public void mostrarPlano(boolean[][] zona) {
-        System.out.print("  "); // Espacio inicial para alinear columnas
+        
+        System.out.print("  "); //espacio inicial para alinear columnas
         for (int col = 0; col < zona[0].length; col++) {
-            System.out.print((col + 1) + " "); // Etiquetas de columnas
+            System.out.print((col + 1) + " "); //etiquetas de columnas
         }
         System.out.println();
     
         for (int fila = 0; fila < zona.length; fila++) {
-            System.out.print((char) ('A' + fila) + " "); // Etiquetas de filas
+            System.out.print((char) ('A' + fila) + " "); //etiquetas de filas
             for (int col = 0; col < zona[fila].length; col++) {
                 System.out.print(zona[fila][col] ? 'X' : 'O'); // 'X' ocupado, 'O' libre
                 System.out.print(" ");
@@ -33,39 +35,46 @@ public class EntradaManager {
     }
 
     public boolean[][] getZonaVip() {
+
         return zonaVip;
     }
     
     public boolean[][] getZonaNormal() {
+
         return zonaNormal;
     }
     
     public boolean[][] getZonaPalco() {
+
         return zonaPalco;
     }
 
     public EntradaManager() {
+
         this.entradasCompradas = new ArrayList<>();
         this.reservasAsientos = new ArrayList<>();
     }
 
     public void iniciarNuevaCompra() {
-    idCompraActual = idVentaGlobal++; // Asignar nuevo ID de compra
+    idCompraActual = idVentaGlobal++; //asignar nuevo ID de compra
 }
 
     public void agregarVenta(int zona, int fila, int columna, double precio, char filaChar, double descuentoAplicado) {
+        
         Entrada nuevaVenta = new Entrada(idVentaGlobal++, zona, fila, columna, precio, filaChar, false, descuentoAplicado);
         entradasCompradas.add(nuevaVenta);
         System.out.println("Venta registrada: " + nuevaVenta);
     }
 
     public void agregarReserva(int zona, int fila, int columna, double precio, char filaChar) {
+        
         Entrada nuevaReserva = new Entrada(idVentaGlobal++, zona, fila, columna, precio, filaChar, true, 0);
         reservasAsientos.add(nuevaReserva);
         System.out.println("Reserva registrada: " + nuevaReserva);
     }
 
     public void confirmarReserva(int idReserva, double descuentoAplicado) {
+        
         for (Entrada reserva : reservasAsientos) {
             if (reserva.getIdVenta() == idReserva) {
                 reserva.setReserva(false);
@@ -80,6 +89,7 @@ public class EntradaManager {
     }
 
     public double calcularDescuento(int edad, double precioBase) {
+        
         double descuento = 0.0;
     
         if (edad >= 60) {
@@ -88,18 +98,21 @@ public class EntradaManager {
             descuento = 0.10; // 10% descuento para estudiantes
         }
     
-        return descuento; // Devuelve solo el porcentaje para aplicarlo al precio base
+        return descuento; //devuelve solo el porcentaje para aplicarlo al precio base
     }
 
     public List<Entrada> obtenerEntradasCompradas() {
+        
         return entradasCompradas;
     }
 
     public List<Entrada> obtenerReservasAsientos() {
+       
         return reservasAsientos;
     }
 
     public void procesarPago(Scanner scanner) {
+       
         if (entradasCompradas.isEmpty()) {
             System.out.println("No hay compras realizadas. Por favor, compre sus entradas antes de proceder al pago.");
             return;
@@ -110,7 +123,7 @@ public class EntradaManager {
         System.out.println("1. Débito\n2. Crédito\n3. Transferencia\n4. Cancelar compra");
     
         int opcionPago = scanner.nextInt();
-        scanner.nextLine(); // Limpiar buffer
+        scanner.nextLine();
     
         switch (opcionPago) {
             case 1 -> procesarPagoDebito(scanner);
@@ -123,23 +136,25 @@ public class EntradaManager {
             default -> System.out.println("Opción inválida.");
         }
     
-        generarBoleta(); // Se genera la boleta después del pago exitoso
+        generarBoleta(); //la boleta sera generada solo después de que se efectué el pago
         entradasCompradas.clear();
-        System.out.println("Compra completada y procesada correctamente.");
+        System.out.println("Compra completada correctamente.");
     }
 
     private void procesarPagoDebito(Scanner scanner) {
-        System.out.print("Ingrese su correo electrónico: ");
+       
+        System.out.print("Antes de continuar, ingrese su correo electrónico: ");
         String correo = scanner.nextLine();
     
         System.out.println("Procesando pago con tarjeta de débito...");
         esperarProcesamiento();
     
-        System.out.println("Pago confirmado. Se enviará un comprobante a " + correo);
+        System.out.println("Pago confirmado. Su boleta y entradas serán enviados al correo " + correo);
     }
 
     private void procesarPagoCredito(Scanner scanner) {
-        System.out.print("Ingrese su correo electrónico: ");
+        
+        System.out.print("Antes de continuar, ingrese su correo electrónico: ");
         String correo = scanner.nextLine();
     
         int cuotas;
@@ -154,11 +169,12 @@ public class EntradaManager {
         System.out.println("Procesando pago con tarjeta de crédito en " + cuotas + " cuotas...");
         esperarProcesamiento();
     
-        System.out.println("Pago confirmado en " + cuotas + " cuotas. Se enviará un comprobante a " + correo);
+        System.out.println("Pago confirmado en " + cuotas + " cuotas. Su boleta y entradas serán enviados al correo " + correo);
     }
 
     private void procesarPagoTransferencia(Scanner scanner) {
-        System.out.print("Ingrese su correo electrónico: ");
+       
+        System.out.print("Antes de continuar, ingrese su correo electrónico: ");
         String correo = scanner.nextLine();
     
         System.out.println("Procesando solicitud de pago por transferencia...");
@@ -168,15 +184,19 @@ public class EntradaManager {
         System.out.println("Revise su correo y siga los pasos indicados para finalizar la compra.");
     }
 
+    //simula una espera de 2 segundos para verificar el pago, es un método netamente estético
     private void esperarProcesamiento() {
+       
         try {
-            Thread.sleep(2000); // Espera de 2 segundos
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             System.out.println("Error en la simulación de pago.");
         }
     }
 
+    //generamos una boleta con el detalle de entradas compradas y el valor total
     public void generarBoleta() {
+       
         System.out.println("\n--------------- BOLETA ---------------");
         System.out.println("                Nº 000" + idCompraActual);
         System.out.println("             TEATRO MORO");
@@ -218,31 +238,27 @@ public class EntradaManager {
     }
 
     public void promocionesDisponibles() {
+       
         System.out.println("\n--- Promociones Disponibles ---");
         List<String> promociones = List.of(
             "10% de descuento para estudiantes.",
             "15% de descuento para personas de la tercera edad."
         );
+        System.out.println("*Promociones no acumulables");
     
         promociones.forEach(System.out::println);
     }
 
-    private void confirmarCompra(String metodoPago) {
-        System.out.println("Has elegido el método de pago: " + metodoPago);
-        System.out.println("Procesando la compra...");
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        System.out.println("¡Compra confirmada!");
-    }
-
+    /* permite acceder al menu de modificación de compras, las opciones disponibles permitirán al usuario
+    cambiar una entrada previamente reservada, eliminarla o agregar mas entradas, siempre respetando el
+    limite máximo de 5 entradas por compra
+    */
     public void modificarCompra(Scanner scanner) {
+       
         System.out.println("\n--- Modificar Compra ---");
         System.out.println("1. Cambiar entrada");
         System.out.println("2. Eliminar entrada");
-        System.out.println("3. Agregar más entradas");
+        System.out.println("3. Agregar entradas");
         System.out.println("4. Regresar al menú principal");
         System.out.print("Seleccione una opción: ");
     
@@ -257,9 +273,11 @@ public class EntradaManager {
         }
     }
     
+    //método para gestionar el cambio de entrada
     public void cambiarEntrada(Scanner scanner) {
+        
         if (entradasCompradas.isEmpty()) {
-            System.out.println("No hay entradas compradas para modificar.");
+            System.out.println("No dispones de ninguna reserva vigente.");
             return;
         }
     
@@ -279,7 +297,7 @@ public class EntradaManager {
     
         Entrada entradaActual = entradasCompradas.get(indiceEntrada);
         
-        // Liberar asiento anterior
+        //liberar asiento anterior
         boolean[][] zonaActual = switch (entradaActual.getZonaSeleccionada()) {
             case 1 -> zonaVip;
             case 2 -> zonaNormal;
@@ -318,13 +336,15 @@ public class EntradaManager {
         System.out.println("Entrada modificada exitosamente.");
     }
     
+    //método para generar la eliminación de entradas previamente reservadas
     private void eliminarEntrada(Scanner scanner) {
+       
         if (entradasCompradas.isEmpty()) {
-            System.out.println("No hay entradas compradas para eliminar.");
+            System.out.println("No hay entradas para eliminar.");
             return;
         }
     
-        // Mostrar entradas y permitir eliminación
+        //mostrar entradas y permitir eliminación
         System.out.println("\n--- Entradas Compradas ---");
         for (int i = 0; i < entradasCompradas.size(); i++) {
             System.out.println((i + 1) + ". " + entradasCompradas.get(i));
@@ -342,6 +362,7 @@ public class EntradaManager {
     }
 
     public int[] reservarAsiento(Scanner scanner, boolean[][] zonaActual) {
+      
         int fila, columna;
         while (true) {
             System.out.print("Seleccione fila (A, B, C...): ");
@@ -352,18 +373,20 @@ public class EntradaManager {
     
             if (fila < 0 || fila >= zonaActual.length || columna < 0 || columna >= zonaActual[0].length) {
                 System.out.println("Selección inválida. Intente nuevamente.");
-            } else if (zonaActual[fila][columna]) { // Verifica si está ocupado
+            } else if (zonaActual[fila][columna]) { //verifica si está ocupado
                 System.out.println("El asiento ya está ocupado. Intente nuevamente.");
             } else {
-                zonaActual[fila][columna] = true; // Marcar asiento como reservado
+                zonaActual[fila][columna] = true; //marcar asiento como reservado
                 break;
             }
         }
         return new int[]{fila, columna};
     }
     
+    //método inicial para la selección de entradas (menu 1)
     public void seleccionarEntradas(Scanner scanner) {
-        iniciarNuevaCompra(); // Generar un nuevo ID de compra
+       
+        iniciarNuevaCompra(); //generar un nuevo ID de compra
     
         System.out.println("¿Cuántas entradas desea comprar? (Máximo 5)");
         int cantidad = scanner.nextInt();
@@ -416,7 +439,9 @@ public class EntradaManager {
         }
     }
 
+    //permite ver un detalle de las entradas reservadas antes del pago
     public void mostrarDetalleCompra() {
+       
         if (entradasCompradas.isEmpty()) {
             System.out.println("\nNo hay entradas compradas.");
             return;
@@ -429,7 +454,7 @@ public class EntradaManager {
         double total = 0;
     
         for (Entrada entrada : entradasCompradas) {
-            System.out.println(entrada); // Usa el `toString()` de `Entrada` para mostrar la información
+            System.out.println(entrada); //usa el `toString()` de `Entrada` para mostrar la información
             total += entrada.getPrecioBase() * (1 - entrada.getDescuentoAplicado());
         }
     
@@ -437,13 +462,15 @@ public class EntradaManager {
         System.out.printf("TOTAL DE LA COMPRA: $%.2f%n", total);
     }
 
+    //método para agregar entradas adicionales (con la limitación de 5 entradas por compra)
     public void agregarEntradas(Scanner scanner) {
+       
         if (entradasCompradas.isEmpty()) {
-            System.out.println("No hay una compra activa para agregar entradas.");
+            System.out.println("No existe una reserva activa a la cual puedas agregar entradas.");
             return;
         }
     
-        int entradasDisponibles = 5 - entradasCompradas.size(); // 🔹 Determinar cuántas más se pueden comprar
+        int entradasDisponibles = 5 - entradasCompradas.size(); //determinar cuántas más se pueden comprar
     
         if (entradasDisponibles <= 0) {
             System.out.println("Ya ha alcanzado el límite de 5 entradas. No puede agregar más.");
@@ -475,7 +502,7 @@ public class EntradaManager {
     
             if (zonaActual == null) continue;
     
-            mostrarPlano(zonaActual); // Mostrar el mapa de asientos antes de elegir
+            mostrarPlano(zonaActual); //mostrar el mapa de asientos antes de elegir
             System.out.println("Seleccione su asiento:");
             int[] asiento = reservarAsiento(scanner, zonaActual);
             int fila = asiento[0];
@@ -500,7 +527,7 @@ public class EntradaManager {
             System.out.println("Entrada agregada exitosamente con un descuento de " + (descuentoAplicado * 100) + "%.");
         }
     
-        mostrarDetalleCompra(); // Actualizar la boleta después de agregar nuevas entradas
+        mostrarDetalleCompra(); //actualizar la boleta después de agregar nuevas entradas
     }
 
     
